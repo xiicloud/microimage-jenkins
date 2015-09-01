@@ -6,7 +6,7 @@ export CON_NAME=jenkins_t
 export REG_URL=d.nicescale.com:5000
 export IMAGE=jenkins
 export TAGS="1.609.2"
-export BASE_IMAGE=microimages/tomcat
+export BASE_IMAGE=microimages/jre
 
 docker pull $REG_URL/$BASE_IMAGE
 
