@@ -28,6 +28,8 @@ RUN wget http://mirrors.jenkins-ci.org/war-stable/$JENKINS_VERSION/jenkins.war -
 ENV JENKINS_UC https://updates.jenkins-ci.org
 RUN chown -R jenkins "$JENKINS_HOME" /usr/share/jenkins/ref
 
+RUN apk add --update ttf-ubuntu-font-family && rm -fr /var/cache/apk/*
+
 # for main web interface:
 EXPOSE 8080
 
