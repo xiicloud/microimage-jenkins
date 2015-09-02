@@ -1,40 +1,27 @@
-# Supported tags and respective `Dockerfile` links
-
--	[`latest`, `1.609.2` (*Dockerfile*)](https://github.com/jenkinsci/jenkins-ci.org-docker/blob/fdeab76f7ea7b508a8bae9465d35761571092a7c/Dockerfile)
-
-For more information about this image and its history, please see the [relevant manifest file (`library/jenkins`)](https://github.com/docker-library/official-images/blob/master/library/jenkins) in the [`docker-library/official-images` GitHub repo](https://github.com/docker-library/official-images).
-
-# Jenkins
-
-The Jenkins Continuous Integration and Delivery server.
-
-This is a fully functional Jenkins server, based on the Long Term Support release [http://jenkins-ci.org/](http://jenkins-ci.org/).
 
 ![logo](http://jenkins-ci.org/sites/default/files/jenkins_logo.png)
 
-# How to use this image
+## 如何使用镜像
 
 ```console
-$ docker run -p 8080:8080 jenkins
+$ docker run -p 8080:8080 index.csphere.cn/micromiages/jenkins
 ```
 
-This will store the workspace in /var/jenkins_home. All Jenkins data lives in there - including plugins and configuration. You will probably want to make that a persistent volume:
+这样启动将会把所有workspace存储到 `/var/jenkins_home` 目录，包括所有数据、插件以及配置，你也许希望运行在一个持久化的数据卷里:
 
 ```console
-$ docker run --name myjenkins -p 8080:8080 -v /var/jenkins_home jenkins
+$ docker run --name myjenkins -p 8080:8080 -v /var/jenkins_home index.csphere.cn/micromiages/jenkins
 ```
 
-The volume for the "myjenkins" named container will then be persistent.
+myjenkins这个容器里的卷将会得到持久化，你也可以映射一个主机目录:
 
-You can also bind mount in a volume from the host:
-
-First, ensure that /your/home is accessible by the jenkins user in container (jenkins user - uid 102 normally - or use -u root), then:
+首先必须确保 `/your/home` 可以被容器里的jenkins用户访问
 
 ```console
-$ docker run -p 8080:8080 -v /your/home:/var/jenkins_home jenkins
+$ docker run -p 8080:8080 -v /your/home:/var/jenkins_home index.csphere.cn/micromiages/jenkins
 ```
 
-## Backing up data
+## 备份数据
 
 If you bind mount in a volume - you can simply back up that directory (which is jenkins_home) at any time.
 
@@ -51,26 +38,3 @@ You can run builds on the master (out of the box) buf if you want to attach buil
 
 All the data needed is in the /var/jenkins_home directory - so depending on how you manage that - depends on how you upgrade. Generally - you can copy it out - and then "docker pull" the image again - and you will have the latest LTS - you can then start up with -v pointing to that data (/var/jenkins_home) and everything will be as you left it.
 
-# Supported Docker versions
-
-This image is officially supported on Docker version 1.8.1.
-
-Support for older versions (down to 1.0) is provided on a best-effort basis.
-
-# User Feedback
-
-## Documentation
-
-Documentation for this image is stored in the [`jenkins/` directory](https://github.com/docker-library/docs/tree/master/jenkins) of the [`docker-library/docs` GitHub repo](https://github.com/docker-library/docs). Be sure to familiarize yourself with the [repository's `README.md` file](https://github.com/docker-library/docs/blob/master/README.md) before attempting a pull request.
-
-## Issues
-
-If you have any problems with or questions about this image, please contact us through a [GitHub issue](https://github.com/cloudbees/jenkins-ci.org-docker/issues).
-
-You can also reach many of the official image maintainers via the `#docker-library` IRC channel on [Freenode](https://freenode.net).
-
-## Contributing
-
-You are invited to contribute new features, fixes, or updates, large or small; we are always thrilled to receive pull requests, and do our best to process them as fast as we can.
-
-Before you start to code, we recommend discussing your plans through a [GitHub issue](https://github.com/cloudbees/jenkins-ci.org-docker/issues), especially for more ambitious contributions. This gives other contributors a chance to point you in the right direction, give you feedback on your design, and help you find out if someone else is working on the same thing.
