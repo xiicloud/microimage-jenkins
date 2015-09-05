@@ -7,10 +7,13 @@ export REG_URL=d.nicescale.com:5000
 export IMAGE=jenkins
 export TAGS="1.609.2"
 export BASE_IMAGE=microimages/jre
+JENKINS_WAR=/root/downloads/jenkins.war
 
 docker pull $REG_URL/$BASE_IMAGE
 
 docker tag -f $REG_URL/$BASE_IMAGE $BASE_IMAGE
+
+cp $JENKINS_WAR ./
 
 docker build -t $REG_URL/microimages/$IMAGE .
 
