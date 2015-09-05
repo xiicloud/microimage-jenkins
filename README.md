@@ -3,14 +3,14 @@
 ## 如何使用镜像
 
 ```console
-$ docker run -p 8080:8080 index.csphere.cn/micromiages/jenkins
+$ docker run -p 8080:8080 index.csphere.cn/microimages/jenkins
 ```
 
 这样启动将会把所有workspace存储到 `/var/jenkins_home` 目录，包括所有数据、插件以及配置，你也许希望运行在一个持久化的数
 据卷里:
 
 ```console
-$ docker run --name myjenkins -p 8080:8080 -v /var/jenkins_home index.csphere.cn/micromiages/jenkins
+$ docker run --name myjenkins -p 8080:8080 -v /var/jenkins_home index.csphere.cn/microimages/jenkins
 ```
 
 myjenkins这个容器里的卷将会得到持久化，你也可以映射一个主机目录:
@@ -20,7 +20,7 @@ myjenkins这个容器里的卷将会得到持久化，你也可以映射一个�
 You can also use a volume container:
 
 ```console
-$ docker run -p 8080:8080 -p 50000:50000 -v /your/home:/var/jenkins_home index.csphere.cn/micromiages/jenkins
+$ docker run -p 8080:8080 -p 50000:50000 -v /your/home:/var/jenkins_home index.csphere.cn/microimages/jenkins
 ```
 
 ## 备份数据
@@ -88,7 +88,7 @@ define a derived jenkins image based on the official one with some customized se
 to force use of HTTPS with a certificate included in the image
 
 ```
-FROM jenkins:1.565.3
+FROM index.csphere.cn/microimages/jenkins
 
 COPY https.pem /var/lib/jenkins/cert
 COPY https.key /var/lib/jenkins/pk
@@ -99,12 +99,12 @@ EXPOSE 8083
 You can also change the default slave agent port for jenkins by defining `JENKINS_SLAVE_AGENT_PORT` in a sample Dockerfile.
 
 ```
-FROM jenkins:1.565.3
+FROM index.csphere.cn/microimages/jenkins
 ENV JENKINS_SLAVE_AGENT_PORT 50001
 ```
 or as a parameter to docker,
 ```
-docker run --name myjenkins -p 8080:8080 -p 50001:50001 --env JENKINS_SLAVE_AGENT_PORT=50001 jenkins
+docker run --name myjenkins -p 8080:8080 -p 50001:50001 --env JENKINS_SLAVE_AGENT_PORT=50001 index.csphere.cn/microimages/jenkins
 ```
 
 # Installing more tools
@@ -112,7 +112,7 @@ docker run --name myjenkins -p 8080:8080 -p 50001:50001 --env JENKINS_SLAVE_AGEN
 You can run your container as root - and install via apt-get, install as part of build steps via jenkins tool installers, or you can create your own Dockerfile to customise, for example: 
 
 ```
-FROM jenkins
+FROM index.csphere.cn/microimages/jenkins
 # if we want to install via apt
 USER root
 RUN apt-get update && apt-get install -y ruby make more-thing-here
@@ -124,7 +124,7 @@ For this purpose, use `/usr/share/jenkins/ref` as a place to define the default 
 wish the target installation to look like :
 
 ```
-FROM jenkins
+FROM index.csphere.cn/microimages/jenkins
 COPY plugins.txt /usr/share/jenkins/ref/
 COPY custom.groovy /usr/share/jenkins/ref/init.groovy.d/custom.groovy
 RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/plugins.txt
@@ -141,7 +141,7 @@ anotherPluginID:version
 ```
 And in derived Dockerfile just invoke the utility plugin.sh script
 ```
-FROM jenkins
+FROM index.csphere.cn/microimages/jenkins
 COPY plugins.txt /usr/share/jenkins/plugins.txt
 RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt
 ```
