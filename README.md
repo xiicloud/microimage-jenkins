@@ -17,8 +17,6 @@ myjenkins这个容器里的卷将会得到持久化，你也可以映射一个�
 
 首先必须确保 `/your/home` 可以被容器里的jenkins用户访问(uid 1000)
 
-You can also use a volume container:
-
 ```console
 $ docker run -p 8080:8080 -p 50000:50000 -v /your/home:/var/jenkins_home index.csphere.cn/microimages/jenkins
 ```
@@ -77,15 +75,13 @@ $ docker run --name myjenkins -p 8080:8080 -p 50000:50000 --env JAVA_OPTS="-Djav
 
 ## 传递Jenkins的启动参数
 
-Argument you pass to docker running the jenkins image are passed to jenkins launcher, so you can run for sample :
+你也可以传递jenkins的运行参数：
+
 ```
 docker run jenkins --version
 ```
-This will dump Jenkins version, just like when you run jenkins as an executable war.
 
-You also can define jenkins arguments as `JENKINS_OPTS`. This is usefull to define a set of arguments to pass to jenkins launcher as you
-define a derived jenkins image based on the official one with some customized settings. The following sample Dockerfile uses this option
-to force use of HTTPS with a certificate included in the image
+你还可以在环境变量 `JENKINS_OPTS` 中定义jenkins的运行参数，比如：
 
 ```
 FROM index.csphere.cn/microimages/jenkins
@@ -96,50 +92,32 @@ ENV JENKINS_OPTS --httpPort=-1 --httpsPort=8083 --httpsCertificate=/var/lib/jenk
 EXPOSE 8083
 ```
 
-You can also change the default slave agent port for jenkins by defining `JENKINS_SLAVE_AGENT_PORT` in a sample Dockerfile.
+你还可以通过定义环境变量 `JENKINS_SLAVE_AGENT_PORT` 来改变默认的slave端口
 
 ```
 FROM index.csphere.cn/microimages/jenkins
 ENV JENKINS_SLAVE_AGENT_PORT 50001
 ```
-or as a parameter to docker,
-```
-docker run --name myjenkins -p 8080:8080 -p 50001:50001 --env JENKINS_SLAVE_AGENT_PORT=50001 index.csphere.cn/microimages/jenkins
-```
 
-# Installing more tools
-
-You can run your container as root - and install via apt-get, install as part of build steps via jenkins tool installers, or you can create your own Dockerfile to customise, for example: 
+或者直接通过-e环境变量提供：
 
 ```
-FROM index.csphere.cn/microimages/jenkins
-# if we want to install via apt
-USER root
-RUN apt-get update && apt-get install -y ruby make more-thing-here
-USER jenkins # drop back to the regular jenkins user - good practice
+docker run --name myjenkins -p 8080:8080 -p 50001:50001 -e JENKINS_SLAVE_AGENT_PORT=50001 index.csphere.cn/microimages/jenkins
 ```
 
-In such a derived image, you can customize your jenkins instance with hook scripts or additional plugins. 
-For this purpose, use `/usr/share/jenkins/ref` as a place to define the default JENKINS_HOME content you
-wish the target installation to look like :
+## 安装更多工具
 
-```
-FROM index.csphere.cn/microimages/jenkins
-COPY plugins.txt /usr/share/jenkins/ref/
-COPY custom.groovy /usr/share/jenkins/ref/init.groovy.d/custom.groovy
-RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/plugins.txt
-```
+我们可以继承此镜像，来定义我们自己的jenkins的hook脚本或插件。比如我们希望加入更多的插件：
 
-When jenkins container starts, it will check JENKINS_HOME has this reference content, and copy them there if required. It will not override such files, so if you upgraded some plugins from UI they won't be reverted on next start.
+plugins.txt文件的内容如下：
 
-Also see [JENKINS-24986](https://issues.jenkins-ci.org/browse/JENKINS-24986)
-
-For your convenience, you also can use a plain text file to define plugins to be installed (using core-support plugin format)
 ```
 pluginID:version
 anotherPluginID:version
 ```
-And in derived Dockerfile just invoke the utility plugin.sh script
+
+Dockerfile编写如下：
+
 ```
 FROM index.csphere.cn/microimages/jenkins
 COPY plugins.txt /usr/share/jenkins/plugins.txt
@@ -147,11 +125,9 @@ RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt
 ```
 
 
-# Upgrading
+## 升级
 
-All the data needed is in the /var/jenkins_home directory - so depending on how you manage that - depends on how you upgrade. Generally - you can copy it out - and then "docker pull" the image again - and you will have the latest LTS - you can then start up with -v pointing to that data (/var/jenkins_home) and everything will be as you left it.
-
-As always - please ensure that you know how to drive docker - especially volume handling!
+所有数据都保存在 `/var/jenkins_home` 目录，只要在运行jenkins时指定了host volume的目录( `-v hostdir:/var/jenkins_home` )，当你升级时，只要该目录不丢失，升级不会造成之前的配置、数据丢失。
 
 ## 授权和法律
 
