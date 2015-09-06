@@ -109,12 +109,15 @@ docker run --name myjenkins -p 8080:8080 -p 50001:50001 -e JENKINS_SLAVE_AGENT_P
 
 我们可以继承此镜像，来定义我们自己的jenkins的hook脚本或插件。比如我们希望加入更多的插件：
 
+具体的插件可以通过[Jenkins插件](http://updates.jenkins-ci.org/download/plugins/) 搜索。
+
 plugins.txt文件的内容如下：
 
 ```
 pluginID:version
 anotherPluginID:version
 ```
+
 
 Dockerfile编写如下：
 
