@@ -23,8 +23,8 @@ ENV JENKINS_VERSION 1.609.2
 
 # could use ADD but this one does not check Last-Modified header 
 # see https://github.com/docker/docker/issues/8331
-# RUN wget http://mirrors.jenkins-ci.org/war-stable/$JENKINS_VERSION/jenkins.war -O /usr/share/jenkins/jenkins.war
-COPY jenkins.war /usr/share/jenkins/jenkins.war
+RUN wget http://mirrors.jenkins-ci.org/war-stable/$JENKINS_VERSION/jenkins.war -O /usr/share/jenkins/jenkins.war
+# COPY jenkins.war /usr/share/jenkins/jenkins.war
 
 ENV JENKINS_UC https://updates.jenkins-ci.org
 RUN chown -R jenkins "$JENKINS_HOME" /usr/share/jenkins/ref

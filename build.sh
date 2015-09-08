@@ -13,7 +13,7 @@ docker pull $REG_URL/$BASE_IMAGE
 
 docker tag -f $REG_URL/$BASE_IMAGE $BASE_IMAGE
 
-cp $JENKINS_WAR ./
+#cp $JENKINS_WAR ./
 
 docker build -t $REG_URL/microimages/$IMAGE .
 
