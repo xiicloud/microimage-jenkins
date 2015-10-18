@@ -3,10 +3,10 @@ FROM microimages/jre
 ENV JENKINS_HOME /var/jenkins_home
 ENV JENKINS_SLAVE_AGENT_PORT 50000
 
-# Jenkins is ran with user `jenkins`, uid = 1000
+# Jenkins is ran with user `jenkins`, uid = 999
 # If you bind mount a volume from host/volume from a data container, 
 # ensure you use same uid
-RUN adduser -h "$JENKINS_HOME" -u 1000 -s /bin/sh -D jenkins
+RUN adduser -h "$JENKINS_HOME" -u 999 -s /bin/sh -D jenkins
 
 # Jenkins home directoy is a volume, so configuration and build history 
 # can be persisted and survive image upgrades
@@ -29,7 +29,7 @@ RUN wget http://mirrors.jenkins-ci.org/war-stable/$JENKINS_VERSION/jenkins.war -
 ENV JENKINS_UC https://updates.jenkins-ci.org
 RUN chown -R jenkins "$JENKINS_HOME" /usr/share/jenkins/ref
 
-RUN apk add --update ttf-ubuntu-font-family && rm -fr /var/cache/apk/*
+RUN apk add --update ttf-ubuntu-font-family sqlite-libs && rm -fr /var/cache/apk/*
 
 # for main web interface:
 EXPOSE 8080
