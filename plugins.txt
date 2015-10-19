@@ -1,4 +1,4 @@
-gitclient
+git-client
 git
 github-api
 github
