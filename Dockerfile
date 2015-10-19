@@ -27,7 +27,6 @@ RUN wget http://mirrors.jenkins-ci.org/war-stable/$JENKINS_VERSION/jenkins.war -
 # COPY jenkins.war /usr/share/jenkins/jenkins.war
 
 ENV JENKINS_UC https://updates.jenkins-ci.org
-RUN chown -R jenkins "$JENKINS_HOME" /usr/share/jenkins/ref
 
 RUN apk add --update ttf-ubuntu-font-family sqlite-libs && rm -fr /var/cache/apk/*
 

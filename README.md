@@ -15,11 +15,34 @@ $ docker run --name myjenkins -p 8080:8080 -v /var/jenkins_home index.csphere.cn
 
 myjenkins这个容器里的卷将会得到持久化，你也可以映射一个主机目录:
 
-首先必须确保 `/your/home` 可以被容器里的jenkins用户访问(uid 999)
-
 ```console
 $ sudo chown 999 /your/home
 $ docker run -p 8080:8080 -p 50000:50000 -v /your/home:/var/jenkins_home index.csphere.cn/microimages/jenkins
+```
+
+## jenkins管理员用户
+
+jenkins镜像启动后，打开浏览器 `http://your-ip:8080` , 会提示输入用户名密码，这里默认用户名admin，密码admin。进入后在 `用户` 菜单里修改密码。
+
+## 如何和docker结合
+
+docker最大的优势在于部署，jenkins最强大的在于作业调度和插件系统，如何结合两者？
+
+jenkins镜像里内置了docker client命令行工具，`/usr/bin/docker`，因此我们只需要传递 `DOCKER_HOST` 环境变量 或者映射 `docker.sock` 文件给jenkins容器，就可以让jenkins容器里面拥有docker的操作能力，进而将两者结合起来。
+
+比如：
+
+```
+docker run -p 8080:8080 -p 50000:50000 -v /your/home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock index.csphere.cn/microimages/jenkins
+```
+
+然后我们就可以在自己的jenkins项目中，添加一个执行shell脚本，示例如下：
+```
+TAG=$(echo $GIT_COMMIT | awk  '{ string=substr($0, 1, 7); print string; }' )
+docker build -t demo:$TAG .
+docker run --rm demo:$TAG run_test
+docker tag -f demo:$TAG your_registry/demo:$TAG
+docker push your_registry/demo:$TAG
 ```
 
 ## 备份数据
