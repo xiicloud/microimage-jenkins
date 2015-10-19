@@ -17,7 +17,7 @@ RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d
 
 COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy
 COPY docker /usr/bin/docker
-ADD user /usr/share/jenkins/
+ADD user /usr/share/jenkins/user/
 
 ENV JENKINS_VERSION 1.625.1
 
@@ -39,10 +39,10 @@ EXPOSE 50000
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
 COPY jenkins.sh /usr/local/bin/jenkins.sh
-ENTRYPOINT ["/usr/local/bin/jenkins.sh"]
+CMD ["/usr/local/bin/jenkins.sh"]
 
 # from a derived Dockerfile, can use `RUN plugin.sh active.txt` to setup /usr/share/jenkins/ref/plugins from a support bundle
 COPY plugins.sh /usr/local/bin/plugins.sh
-#COPY plugins.txt /usr/share/jenkins/plugins.txt
-#RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt
+COPY plugins.txt /usr/share/jenkins/plugins.txt
+RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt
 
