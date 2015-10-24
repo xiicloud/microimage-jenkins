@@ -16,7 +16,7 @@ VOLUME /var/jenkins_home
 RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d
 
 COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy
-ADD docker.gz /usr/bin/
+ADD docker.tgz /usr/bin/
 ADD user /usr/share/jenkins/user/
 
 ENV JENKINS_VERSION 1.625.1
