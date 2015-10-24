@@ -16,7 +16,6 @@ $ docker run --name myjenkins -p 8080:8080 -v /var/jenkins_home index.csphere.cn
 myjenkins这个容器里的卷将会得到持久化，你也可以映射一个主机目录:
 
 ```console
-$ sudo chown 999 /your/home
 $ docker run -p 8080:8080 -p 50000:50000 -v /your/home:/var/jenkins_home index.csphere.cn/microimages/jenkins
 ```
 
