@@ -28,7 +28,7 @@ RUN wget http://mirrors.jenkins-ci.org/war-stable/$JENKINS_VERSION/jenkins.war -
 
 ENV JENKINS_UC https://updates.jenkins-ci.org
 
-RUN apk add --update ttf-ubuntu-font-family sqlite-libs && rm -fr /var/cache/apk/*
+RUN apk-install git openssh-client ttf-ubuntu-font-family sqlite-libs
 
 # for main web interface:
 EXPOSE 8080
@@ -39,7 +39,7 @@ EXPOSE 50000
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
 COPY jenkins.sh /usr/local/bin/jenkins.sh
-CMD ["/usr/local/bin/jenkins.sh"]
+ENTRYPOINT ["/usr/local/bin/jenkins.sh"]
 
 # from a derived Dockerfile, can use `RUN plugin.sh active.txt` to setup /usr/share/jenkins/ref/plugins from a support bundle
 COPY plugins.sh /usr/local/bin/plugins.sh
