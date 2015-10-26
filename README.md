@@ -6,8 +6,7 @@
 $ docker run -p 8080:8080 index.csphere.cn/microimages/jenkins
 ```
 
-这样启动将会把所有workspace存储到 `/var/jenkins_home` 目录，包括所有数据、插件以及配置，你也许希望运行在一个持久化的数
-据卷里:
+这样启动将会把所有workspace存储到 `/var/jenkins_home` 目录，包括所有数据、插件以及配置，你也许希望运行在一个持久化的数据卷里:
 
 ```console
 $ docker run --name myjenkins -p 8080:8080 -v /var/jenkins_home index.csphere.cn/microimages/jenkins
@@ -32,7 +31,7 @@ jenkins镜像里内置了docker client命令行工具，`/usr/bin/docker`，因�
 比如：
 
 ```
-docker run -p 8080:8080 -p 50000:50000 -v /your/home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock index.csphere.cn/microimages/jenkins
+docker run -p 8080:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock index.csphere.cn/microimages/jenkins
 ```
 
 然后我们就可以在自己的jenkins项目中，添加一个执行shell脚本，示例如下：
