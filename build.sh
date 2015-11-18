@@ -5,7 +5,7 @@ set -e
 export CON_NAME=jenkins_t
 export REG_URL=d.nicescale.com:5000
 export IMAGE=jenkins
-export TAGS="1.625.1"
+export TAGS="1.625.2"
 export BASE_IMAGE=microimages/jre
 JENKINS_WAR=/root/downloads/jenkins.war
 

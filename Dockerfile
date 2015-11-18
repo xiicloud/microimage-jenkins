@@ -19,7 +19,7 @@ COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groov
 ADD docker.tgz /usr/bin/
 ADD user /usr/share/jenkins/user/
 
-ENV JENKINS_VERSION 1.625.1
+ENV JENKINS_VERSION 1.625.2
 
 # could use ADD but this one does not check Last-Modified header 
 # see https://github.com/docker/docker/issues/8331
